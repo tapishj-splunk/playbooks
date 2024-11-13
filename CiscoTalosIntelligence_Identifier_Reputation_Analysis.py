@@ -98,7 +98,7 @@ def url_reputation(action=None, success=None, container=None, results=None, hand
     ## Custom Code End
     ################################################################################
 
-    phantom.act("url reputation", parameters=parameters, name="url_reputation", assets=["cisco_talos_intelligence"], callback=url_reputation_filter)
+    phantom.act("url reputation", parameters=parameters, name="url_reputation", assets=["ciscotalosintelligence"], callback=url_reputation_filter)
 
     return
 
@@ -134,7 +134,7 @@ def domain_reputation(action=None, success=None, container=None, results=None, h
     ## Custom Code End
     ################################################################################
 
-    phantom.act("domain reputation", parameters=parameters, name="domain_reputation", assets=["cisco_talos_intelligence"], callback=domain_reputation_filter)
+    phantom.act("domain reputation", parameters=parameters, name="domain_reputation", assets=["ciscotalosintelligence"], callback=domain_reputation_filter)
 
     return
 
@@ -170,7 +170,7 @@ def ip_reputation(action=None, success=None, container=None, results=None, handl
     ## Custom Code End
     ################################################################################
 
-    phantom.act("ip reputation", parameters=parameters, name="ip_reputation", assets=["cisco_talos_intelligence"], callback=ip_reputation_filter)
+    phantom.act("ip reputation", parameters=parameters, name="ip_reputation", assets=["ciscotalosintelligence"], callback=ip_reputation_filter)
 
     return
 
@@ -255,7 +255,7 @@ def format_2(action=None, success=None, container=None, results=None, handle=Non
     # Format output of domain threat data into an appropriate format for artifact_create
     ################################################################################
 
-    template = """%%\n{{\"cef_data\": \n{{\"domain\": \"{0}\", \"threat level\": \"{1}\", \"threat categories\": \"{2}\", \"aup level categories\": \"{3}\"}}}}\n%%"""
+    template = """SOAR analyzed Domain using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| Domain | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%"""
 
     # parameter list for template variable replacement
     parameters = [
@@ -277,7 +277,7 @@ def format_2(action=None, success=None, container=None, results=None, handle=Non
 
     phantom.format(container=container, template=template, parameters=parameters, name="format_2")
 
-    domain_artifact_create(container=container)
+    build_domain_output(container=container)
 
     return
 
@@ -290,7 +290,7 @@ def format_1(action=None, success=None, container=None, results=None, handle=Non
     # Format output of url threat data into an appropriate format for artifact_create
     ################################################################################
 
-    template = """%%\n{{\"cef_data\": \n{{\"url\": \"{0}\", \"threat level\": \"{1}\", \"threat categories\": \"{2}\", \"aup level categories\":\"{3}\"}}}}\n%%"""
+    template = """SOAR analyzed URL using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| URL | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%"""
 
     # parameter list for template variable replacement
     parameters = [
@@ -312,7 +312,7 @@ def format_1(action=None, success=None, container=None, results=None, handle=Non
 
     phantom.format(container=container, template=template, parameters=parameters, name="format_1")
 
-    url_artifact_create(container=container)
+    build_url_output(container=container)
 
     return
 
@@ -325,7 +325,7 @@ def format_3(action=None, success=None, container=None, results=None, handle=Non
     # Format output of ip threat data into an appropriate format for artifact_create
     ################################################################################
 
-    template = """%%\n{{\"cef_data\": \n{{\"ip\": \"{0}\", \"threat level\": \"{1}\", \"threat categories\": \"{2}\", \"aup level categories\": \"{3}\"}}}}\n%%"""
+    template = """SOAR analyzed IP using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| IP | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%"""
 
     # parameter list for template variable replacement
     parameters = [
@@ -347,38 +347,55 @@ def format_3(action=None, success=None, container=None, results=None, handle=Non
 
     phantom.format(container=container, template=template, parameters=parameters, name="format_3")
 
-    ip_artifact_create(container=container)
+    build_ip_output(container=container)
 
     return
 
 
 @phantom.playbook_block()
-def url_artifact_create(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):
-    phantom.debug("url_artifact_create() called")
+def build_url_output(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):
+    phantom.debug("build_url_output() called")
 
     ################################################################################
-    # Create new artifact with the output of the url reputation
+    # Generate an observable dictionary to output into the observables data path.
     ################################################################################
 
-    id_value = container.get("id", None)
-    format_1__as_list = phantom.get_format_data(name="format_1__as_list")
+    url_reputation_result_data = phantom.collect2(container=container, datapath=["url_reputation:action_result.parameter.url"], action_results=results)
+    filtered_result_0_data_url_reputation_filter = phantom.collect2(container=container, datapath=["filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Level","filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Categories","filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.AUP"])
 
-    parameters = []
-
-    # build parameters list for 'url_artifact_create' call
-    for format_1__item in format_1__as_list:
-        parameters.append({
-            "name": "URL reputation results",
-            "tags": None,
-            "label": "cisco_talos_url_reputation",
-            "severity": None,
-            "cef_field": None,
-            "cef_value": None,
-            "container": id_value,
-            "input_json": format_1__item,
-            "cef_data_type": None,
-            "run_automation": None,
-        })
+    url_reputation_parameter_url = [item[0] for item in url_reputation_result_data]
+    filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_url_reputation_filter]
+    filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_url_reputation_filter]
+    filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_url_reputation_filter]
+    
+    from urllib.parse import urlparse
+    build_url_output__observable_array = []
+    
+    for url, threat_level, threat_categories, aup in zip(url_reputation_parameter_url, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):
+        parsed_url = urlparse(url)
+        observable_object = {
+            "value": url,
+            "type": "url",
+            "reputation": {
+                "threat_level": threat_level,
+                "threat_categories": threat_categories,
+                "aup_categories": aup
+            },
+            "attributes": {
+                "hostname": parsed_url.hostname,
+                "scheme": parsed_url.scheme
+            },
+            "source": "Talos Intelligence",
+        }
+        if parsed_url.path:
+            observable_object['attributes']['path'] = parsed_url.path
+        if parsed_url.query:
+            observable_object['attributes']['query'] = parsed_url.query
+        if parsed_url.port:
+            observable_object['attributes']['port'] = parsed_url.port
+        
+        build_url_output__observable_array.append(observable_object)
+         
 
     ################################################################################
     ## Custom Code Start
@@ -390,38 +407,39 @@ def url_artifact_create(action=None, success=None, container=None, results=None,
     ## Custom Code End
     ################################################################################
 
-    phantom.custom_function(custom_function="community/artifact_create", parameters=parameters, name="url_artifact_create")
+    phantom.save_run_data(key="build_url_output:observable_array", value=json.dumps(build_url_output__observable_array))
 
     return
 
-
 @phantom.playbook_block()
-def domain_artifact_create(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):
-    phantom.debug("domain_artifact_create() called")
+def build_domain_output(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):
+    phantom.debug("build_domain_output() called")
 
     ################################################################################
-    # Create new artifact with the output of the domain reputation
+    # Generate an observable dictionary to output into the observables data path.
     ################################################################################
 
-    id_value = container.get("id", None)
-    format_2__as_list = phantom.get_format_data(name="format_2__as_list")
+    filtered_result_0_data_domain_reputation_filter = phantom.collect2(container=container, datapath=["filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.parameter.domain","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP"])
 
-    parameters = []
+    filtered_result_0_parameter_domain = [item[0] for item in filtered_result_0_data_domain_reputation_filter]
+    filtered_result_0_data___threat_level = [item[1] for item in filtered_result_0_data_domain_reputation_filter]
+    filtered_result_0_data___threat_categories = [item[2] for item in filtered_result_0_data_domain_reputation_filter]
+    filtered_result_0_data___aup = [item[3] for item in filtered_result_0_data_domain_reputation_filter]
 
-    # build parameters list for 'domain_artifact_create' call
-    for format_2__item in format_2__as_list:
-        parameters.append({
-            "name": "Domain reputation results",
-            "tags": None,
-            "label": "cisco_talos_domain_reputation",
-            "severity": None,
-            "cef_field": None,
-            "cef_value": None,
-            "container": id_value,
-            "input_json": format_2__item,
-            "cef_data_type": None,
-            "run_automation": None,
-        })
+    build_domain_output__observable_array = []
+    
+    for domain, threat_level, threat_categories, aup in zip(filtered_result_0_parameter_domain, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):
+        observable_object = {
+            "value": domain,
+            "type": "domain",
+            "reputation": {
+                "threat_level": threat_level,
+                "threat_categories": threat_categories,
+                "aup_categories": aup
+            },
+            "source": "Talos Intelligence"
+        }
+        build_domain_output__observable_array.append(observable_object)
 
     ################################################################################
     ## Custom Code Start
@@ -433,38 +451,46 @@ def domain_artifact_create(action=None, success=None, container=None, results=No
     ## Custom Code End
     ################################################################################
 
-    phantom.custom_function(custom_function="community/artifact_create", parameters=parameters, name="domain_artifact_create")
+    phantom.save_run_data(key="build_domain_output:observable_array", value=json.dumps(build_domain_output__observable_array))
 
     return
 
-
 @phantom.playbook_block()
-def ip_artifact_create(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):
-    phantom.debug("ip_artifact_create() called")
+def build_ip_output(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):
+    phantom.debug("build_ip_output() called")
 
     ################################################################################
-    # Create new artifact with the output of the ip reputation
+    # Generate an observable dictionary to output into the observables data path.
     ################################################################################
 
-    id_value = container.get("id", None)
-    format_3__as_list = phantom.get_format_data(name="format_3__as_list")
+    ip_reputation_result_data = phantom.collect2(container=container, datapath=["ip_reputation:action_result.parameter.ip"], action_results=results)
+    filtered_result_0_data_ip_reputation_filter = phantom.collect2(container=container, datapath=["filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Level","filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Categories","filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.AUP"])
 
-    parameters = []
+    ip_reputation_parameter_ip = [item[0] for item in ip_reputation_result_data]
+    filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_ip_reputation_filter]
+    filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_ip_reputation_filter]
+    filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_ip_reputation_filter]
 
-    # build parameters list for 'ip_artifact_create' call
-    for format_3__item in format_3__as_list:
-        parameters.append({
-            "name": "IP reputation results",
-            "tags": None,
-            "label": "cisco_talos_ip_reputation",
-            "severity": None,
-            "cef_field": None,
-            "cef_value": None,
-            "container": id_value,
-            "input_json": format_3__item,
-            "cef_data_type": None,
-            "run_automation": None,
-        })
+    import ipaddress
+    build_ip_output__observable_array = []
+    
+    for ip, threat_level, threat_categories, aup in zip(ip_reputation_parameter_ip, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):
+        
+        observable_object = {
+            "value": ip,
+            "type": "ipv4",
+            "reputation": {
+                "threat_level": threat_level,
+                "threat_categories": threat_categories,
+                "aup_categories": aup
+            },
+            "source": "Talos Intelligence"
+        }
+        ip_addr = ipaddress.ip_address(ip)
+        if isinstance(ip_addr, ipaddress.IPv6Address):
+            observable_object["type"] = "ipv6"
+
+        build_ip_output__observable_array.append(observable_object)
 
     ################################################################################
     ## Custom Code Start
@@ -476,15 +502,29 @@ def ip_artifact_create(action=None, success=None, container=None, results=None, 
     ## Custom Code End
     ################################################################################
 
-    phantom.custom_function(custom_function="community/artifact_create", parameters=parameters, name="ip_artifact_create")
+    phantom.save_run_data(key="build_ip_output:observable_array", value=json.dumps(build_ip_output__observable_array))
 
     return
-
 
 @phantom.playbook_block()
 def on_finish(container, summary):
     phantom.debug("on_finish() called")
 
+    format_1 = phantom.get_format_data(name="format_1")
+    format_2 = phantom.get_format_data(name="format_2")
+    format_3 = phantom.get_format_data(name="format_3")
+    build_url_output__observable_array = json.loads(_ if (_ := phantom.get_run_data(key="build_url_output:observable_array")) != "" else "null")  # pylint: disable=used-before-assignment
+    build_domain_output__observable_array = json.loads(_ if (_ := phantom.get_run_data(key="build_domain_output:observable_array")) != "" else "null")  # pylint: disable=used-before-assignment
+    build_ip_output__observable_array = json.loads(_ if (_ := phantom.get_run_data(key="build_ip_output:observable_array")) != "" else "null")  # pylint: disable=used-before-assignment
+
+    observable_combined_value = phantom.concatenate(build_url_output__observable_array, build_domain_output__observable_array, build_ip_output__observable_array)
+    markdown_report_combined_value = phantom.concatenate(format_1, format_2, format_3)
+
+    output = {
+        "observable": observable_combined_value,
+        "markdown_report": markdown_report_combined_value,
+    }
+
     ################################################################################
     ## Custom Code Start
     ################################################################################
@@ -494,5 +534,7 @@ def on_finish(container, summary):
     ################################################################################
     ## Custom Code End
     ################################################################################
+
+    phantom.save_playbook_output_data(output=output)
 
     return

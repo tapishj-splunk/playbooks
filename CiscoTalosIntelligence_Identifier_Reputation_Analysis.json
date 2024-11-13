@@ -107,44 +107,44 @@
                     "targetPort": "18_in"
                 },
                 {
-                    "id": "port_17_to_port_23",
+                    "id": "port_17_to_port_26",
                     "sourceNode": "17",
                     "sourcePort": "17_out",
-                    "targetNode": "23",
-                    "targetPort": "23_in"
+                    "targetNode": "26",
+                    "targetPort": "26_in"
                 },
                 {
-                    "id": "port_23_to_port_1",
-                    "sourceNode": "23",
-                    "sourcePort": "23_out",
+                    "id": "port_26_to_port_1",
+                    "sourceNode": "26",
+                    "sourcePort": "26_out",
                     "targetNode": "1",
                     "targetPort": "1_in"
                 },
                 {
-                    "id": "port_16_to_port_24",
+                    "id": "port_16_to_port_27",
                     "sourceNode": "16",
                     "sourcePort": "16_out",
-                    "targetNode": "24",
-                    "targetPort": "24_in"
+                    "targetNode": "27",
+                    "targetPort": "27_in"
                 },
                 {
-                    "id": "port_18_to_port_25",
-                    "sourceNode": "18",
-                    "sourcePort": "18_out",
-                    "targetNode": "25",
-                    "targetPort": "25_in"
-                },
-                {
-                    "id": "port_24_to_port_1",
-                    "sourceNode": "24",
-                    "sourcePort": "24_out",
+                    "id": "port_27_to_port_1",
+                    "sourceNode": "27",
+                    "sourcePort": "27_out",
                     "targetNode": "1",
                     "targetPort": "1_in"
                 },
                 {
-                    "id": "port_25_to_port_1",
-                    "sourceNode": "25",
-                    "sourcePort": "25_out",
+                    "id": "port_18_to_port_28",
+                    "sourceNode": "18",
+                    "sourcePort": "18_out",
+                    "targetNode": "28",
+                    "targetPort": "28_in"
+                },
+                {
+                    "id": "port_28_to_port_1",
+                    "sourceNode": "28",
+                    "sourcePort": "28_out",
                     "targetNode": "1",
                     "targetPort": "1_in"
                 }
@@ -165,7 +165,7 @@
                     "type": "start",
                     "warnings": {},
                     "x": 1000,
-                    "y": 419.9999999999993
+                    "y": 419.9999999999992
                 },
                 "1": {
                     "data": {
@@ -181,7 +181,7 @@
                     "type": "end",
                     "warnings": {},
                     "x": 1000,
-                    "y": 1500
+                    "y": 1520
                 },
                 "10": {
                     "data": {
@@ -274,7 +274,7 @@
                             "domain_reputation:action_result.data.*.Threat_Categories",
                             "domain_reputation:action_result.data.*.AUP"
                         ],
-                        "template": "%%\n{{\"cef_data\": \n{{\"domain\": \"{0}\", \"threat level\": \"{1}\", \"threat categories\": \"{2}\", \"aup level categories\": \"{3}\"}}}}\n%%",
+                        "template": "SOAR analyzed Domain using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| Domain | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%",
                         "type": "format"
                     },
                     "errors": {},
@@ -303,7 +303,7 @@
                             "url_reputation:action_result.data.*.Threat_Categories",
                             "url_reputation:action_result.data.*.AUP"
                         ],
-                        "template": "%%\n{{\"cef_data\": \n{{\"url\": \"{0}\", \"threat level\": \"{1}\", \"threat categories\": \"{2}\", \"aup level categories\":\"{3}\"}}}}\n%%",
+                        "template": "SOAR analyzed URL using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| URL | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%",
                         "type": "format"
                     },
                     "errors": {},
@@ -331,7 +331,7 @@
                             "ip_reputation:action_result.data.*.Threat_Categories",
                             "ip_reputation:action_result.data.*.AUP"
                         ],
-                        "template": "%%\n{{\"cef_data\": \n{{\"ip\": \"{0}\", \"threat level\": \"{1}\", \"threat categories\": \"{2}\", \"aup level categories\": \"{3}\"}}}}\n%%",
+                        "template": "SOAR analyzed IP using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| IP | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%",
                         "type": "format"
                     },
                     "errors": {},
@@ -403,503 +403,100 @@
                     "x": 1040,
                     "y": 564.5
                 },
-                "23": {
+                "26": {
+                    "customCode": "@phantom.playbook_block()\ndef build_url_output(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):\n    phantom.debug(\"build_url_output() called\")\n\n    ################################################################################\n    # Generate an observable dictionary to output into the observables data path.\n    ################################################################################\n\n    url_reputation_result_data = phantom.collect2(container=container, datapath=[\"url_reputation:action_result.parameter.url\"], action_results=results)\n    filtered_result_0_data_url_reputation_filter = phantom.collect2(container=container, datapath=[\"filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Level\",\"filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Categories\",\"filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.AUP\"])\n\n    url_reputation_parameter_url = [item[0] for item in url_reputation_result_data]\n    filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_url_reputation_filter]\n    filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_url_reputation_filter]\n    filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_url_reputation_filter]\n    \n    from urllib.parse import urlparse\n    build_url_output__observable_array = []\n    \n    for url, threat_level, threat_categories, aup in zip(url_reputation_parameter_url, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        parsed_url = urlparse(url)\n        observable_object = {\n            \"value\": url,\n            \"type\": \"url\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"attributes\": {\n                \"hostname\": parsed_url.hostname,\n                \"scheme\": parsed_url.scheme\n            },\n            \"source\": \"Talos Intelligence\",\n        }\n        if parsed_url.path:\n            observable_object['attributes']['path'] = parsed_url.path\n        if parsed_url.query:\n            observable_object['attributes']['query'] = parsed_url.query\n        if parsed_url.port:\n            observable_object['attributes']['port'] = parsed_url.port\n        \n        build_url_output__observable_array.append(observable_object)\n         \n\n    ################################################################################\n    ## Custom Code Start\n    ################################################################################\n\n    # Write your custom code here...\n\n    ################################################################################\n    ## Custom Code End\n    ################################################################################\n\n    phantom.save_run_data(key=\"build_url_output:observable_array\", value=json.dumps(build_url_output__observable_array))\n\n    return",
                     "data": {
                         "advanced": {
-                            "customName": "url artifact create",
+                            "customName": "build url output",
                             "customNameId": 0,
-                            "description": "Create new artifact with the output of the url reputation",
+                            "description": "Generate an observable dictionary to output into the observables data path.",
                             "join": [],
-                            "note": "Create new artifact with the output of the url reputation"
+                            "note": "Generate an observable dictionary to output into the observables data path."
                         },
-                        "customFunction": {
-                            "draftMode": false,
-                            "name": "artifact_create",
-                            "repoName": "community"
-                        },
-                        "functionId": 4,
-                        "functionName": "url_artifact_create",
-                        "id": "23",
-                        "loop": {
-                            "enabled": false,
-                            "exitAfterUnit": "m",
-                            "exitAfterValue": 10,
-                            "exitConditionEnabled": false,
-                            "exitLoopAfter": 2,
-                            "pauseUnit": "m",
-                            "pauseValue": 2
-                        },
-                        "selectMore": false,
-                        "type": "utility",
-                        "utilities": {
-                            "artifact_create": {
-                                "description": "Create a new artifact with the specified attributes. Supports all fields available in /rest/artifact. Add any unlisted inputs as dictionary keys in input_json. Unsupported keys will automatically be dropped.",
-                                "fields": [
-                                    {
-                                        "dataTypes": [
-                                            "phantom container id"
-                                        ],
-                                        "description": "Container which the artifact will be added to.",
-                                        "inputType": "item",
-                                        "label": "container",
-                                        "name": "container",
-                                        "placeholder": "container:id",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The name of the new artifact, which is optional and defaults to \"artifact\".",
-                                        "inputType": "item",
-                                        "label": "name",
-                                        "name": "name",
-                                        "placeholder": "artifact",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The label of the new artifact, which is optional and defaults to \"events\"",
-                                        "inputType": "item",
-                                        "label": "label",
-                                        "name": "label",
-                                        "placeholder": "events",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [
-                                            ""
-                                        ],
-                                        "description": "The severity of the new artifact, which is optional and defaults to \"Medium\". Typically this is either \"High\", \"Medium\", or \"Low\".",
-                                        "inputType": "item",
-                                        "label": "severity",
-                                        "name": "severity",
-                                        "placeholder": "Medium",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The name of the CEF field to populate in the artifact, such as \"destinationAddress\" or \"sourceDnsDomain\". Required only if cef_value is provided.",
-                                        "inputType": "item",
-                                        "label": "cef_field",
-                                        "name": "cef_field",
-                                        "placeholder": "destinationAddress",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [
-                                            "*"
-                                        ],
-                                        "description": "The value of the CEF field to populate in the artifact, such as the IP address, domain name, or file hash. Required only if cef_field is provided.",
-                                        "inputType": "item",
-                                        "label": "cef_value",
-                                        "name": "cef_value",
-                                        "placeholder": "192.0.2.192",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The CEF data type of the data in cef_value. For example, this could be \"ip\", \"hash\", or \"domain\". Optional.",
-                                        "inputType": "item",
-                                        "label": "cef_data_type",
-                                        "name": "cef_data_type",
-                                        "placeholder": "ip",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "A comma-separated list of tags to apply to the created artifact, which is optional.",
-                                        "inputType": "item",
-                                        "label": "tags",
-                                        "name": "tags",
-                                        "placeholder": "tag1, tag2, tag3",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "Either \"true\" or \"false\", depending on whether or not the new artifact should trigger the execution of any playbooks that are set to active on the label of the container the artifact will be added to. Optional and defaults to \"false\".",
-                                        "inputType": "item",
-                                        "label": "run_automation",
-                                        "name": "run_automation",
-                                        "placeholder": "false",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "Optional parameter to modify any extra attributes of the artifact. Input_json will be merged with other inputs. In the event of a conflict, input_json will take precedence.",
-                                        "inputType": "item",
-                                        "label": "input_json",
-                                        "name": "input_json",
-                                        "placeholder": "{\"source_data_identifier\": \"1234\", \"data\": \"5678\"}",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    }
-                                ],
-                                "label": "artifact_create",
-                                "name": "artifact_create"
-                            }
-                        },
-                        "utilityType": "custom_function",
-                        "values": {
-                            "artifact_create": {
-                                "cef_data_type": null,
-                                "cef_field": null,
-                                "cef_value": null,
-                                "container": "container:id",
-                                "input_json": "format_1:formatted_data.*",
-                                "label": "cisco_talos_url_reputation",
-                                "name": "URL reputation results",
-                                "run_automation": null,
-                                "severity": null,
-                                "tags": null
-                            }
-                        }
+                        "functionId": 1,
+                        "functionName": "build_url_output",
+                        "id": "26",
+                        "inputParameters": [
+                            "url_reputation:action_result.parameter.url",
+                            "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Level",
+                            "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Categories",
+                            "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.AUP"
+                        ],
+                        "outputVariables": [
+                            "observable_array"
+                        ],
+                        "type": "code"
                     },
                     "errors": {},
-                    "id": "23",
-                    "type": "utility",
+                    "id": "26",
+                    "type": "code",
+                    "userCode": null,
                     "warnings": {},
                     "x": 640,
-                    "y": 1340
+                    "y": 1380
                 },
-                "24": {
+                "27": {
+                    "customCode": "@phantom.playbook_block()\ndef build_domain_output(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):\n    phantom.debug(\"build_domain_output() called\")\n\n    ################################################################################\n    # Generate an observable dictionary to output into the observables data path.\n    ################################################################################\n\n    filtered_result_0_data_domain_reputation_filter = phantom.collect2(container=container, datapath=[\"filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.parameter.domain\",\"filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level\",\"filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories\",\"filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP\"])\n\n    filtered_result_0_parameter_domain = [item[0] for item in filtered_result_0_data_domain_reputation_filter]\n    filtered_result_0_data___threat_level = [item[1] for item in filtered_result_0_data_domain_reputation_filter]\n    filtered_result_0_data___threat_categories = [item[2] for item in filtered_result_0_data_domain_reputation_filter]\n    filtered_result_0_data___aup = [item[3] for item in filtered_result_0_data_domain_reputation_filter]\n\n    build_domain_output__observable_array = []\n    \n    for domain, threat_level, threat_categories, aup in zip(filtered_result_0_parameter_domain, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        observable_object = {\n            \"value\": domain,\n            \"type\": \"domain\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"source\": \"Talos Intelligence\"\n        }\n        build_domain_output__observable_array.append(observable_object)\n\n    ################################################################################\n    ## Custom Code Start\n    ################################################################################\n\n    # Write your custom code here...\n\n    ################################################################################\n    ## Custom Code End\n    ################################################################################\n\n    phantom.save_run_data(key=\"build_domain_output:observable_array\", value=json.dumps(build_domain_output__observable_array))\n\n    return",
                     "data": {
                         "advanced": {
-                            "customName": "domain artifact create",
+                            "customName": "build domain output",
                             "customNameId": 0,
-                            "description": "Create new artifact with the output of the domain reputation",
+                            "description": "Generate an observable dictionary to output into the observables data path.",
                             "join": [],
-                            "note": "Create new artifact with the output of the domain reputation"
+                            "note": "Generate an observable dictionary to output into the observables data path."
                         },
-                        "customFunction": {
-                            "draftMode": false,
-                            "name": "artifact_create",
-                            "repoName": "community"
-                        },
-                        "functionId": 8,
-                        "functionName": "domain_artifact_create",
-                        "id": "24",
-                        "loop": {
-                            "enabled": false,
-                            "exitAfterUnit": "m",
-                            "exitAfterValue": 10,
-                            "exitConditionEnabled": false,
-                            "exitLoopAfter": 2,
-                            "pauseUnit": "m",
-                            "pauseValue": 2
-                        },
-                        "selectMore": false,
-                        "type": "utility",
-                        "utilities": {
-                            "artifact_create": {
-                                "description": "Create a new artifact with the specified attributes. Supports all fields available in /rest/artifact. Add any unlisted inputs as dictionary keys in input_json. Unsupported keys will automatically be dropped.",
-                                "fields": [
-                                    {
-                                        "dataTypes": [
-                                            "phantom container id"
-                                        ],
-                                        "description": "Container which the artifact will be added to.",
-                                        "inputType": "item",
-                                        "label": "container",
-                                        "name": "container",
-                                        "placeholder": "container:id",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The name of the new artifact, which is optional and defaults to \"artifact\".",
-                                        "inputType": "item",
-                                        "label": "name",
-                                        "name": "name",
-                                        "placeholder": "artifact",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The label of the new artifact, which is optional and defaults to \"events\"",
-                                        "inputType": "item",
-                                        "label": "label",
-                                        "name": "label",
-                                        "placeholder": "events",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [
-                                            ""
-                                        ],
-                                        "description": "The severity of the new artifact, which is optional and defaults to \"Medium\". Typically this is either \"High\", \"Medium\", or \"Low\".",
-                                        "inputType": "item",
-                                        "label": "severity",
-                                        "name": "severity",
-                                        "placeholder": "Medium",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The name of the CEF field to populate in the artifact, such as \"destinationAddress\" or \"sourceDnsDomain\". Required only if cef_value is provided.",
-                                        "inputType": "item",
-                                        "label": "cef_field",
-                                        "name": "cef_field",
-                                        "placeholder": "destinationAddress",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [
-                                            "*"
-                                        ],
-                                        "description": "The value of the CEF field to populate in the artifact, such as the IP address, domain name, or file hash. Required only if cef_field is provided.",
-                                        "inputType": "item",
-                                        "label": "cef_value",
-                                        "name": "cef_value",
-                                        "placeholder": "192.0.2.192",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The CEF data type of the data in cef_value. For example, this could be \"ip\", \"hash\", or \"domain\". Optional.",
-                                        "inputType": "item",
-                                        "label": "cef_data_type",
-                                        "name": "cef_data_type",
-                                        "placeholder": "ip",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "A comma-separated list of tags to apply to the created artifact, which is optional.",
-                                        "inputType": "item",
-                                        "label": "tags",
-                                        "name": "tags",
-                                        "placeholder": "tag1, tag2, tag3",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "Either \"true\" or \"false\", depending on whether or not the new artifact should trigger the execution of any playbooks that are set to active on the label of the container the artifact will be added to. Optional and defaults to \"false\".",
-                                        "inputType": "item",
-                                        "label": "run_automation",
-                                        "name": "run_automation",
-                                        "placeholder": "false",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "Optional parameter to modify any extra attributes of the artifact. Input_json will be merged with other inputs. In the event of a conflict, input_json will take precedence.",
-                                        "inputType": "item",
-                                        "label": "input_json",
-                                        "name": "input_json",
-                                        "placeholder": "{\"source_data_identifier\": \"1234\", \"data\": \"5678\"}",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    }
-                                ],
-                                "label": "artifact_create",
-                                "name": "artifact_create"
-                            }
-                        },
-                        "utilityType": "custom_function",
-                        "values": {
-                            "artifact_create": {
-                                "cef_data_type": null,
-                                "cef_field": null,
-                                "cef_value": null,
-                                "container": "container:id",
-                                "input_json": "format_2:formatted_data.*",
-                                "label": "cisco_talos_domain_reputation",
-                                "name": "Domain reputation results",
-                                "run_automation": null,
-                                "severity": null,
-                                "tags": null
-                            }
-                        }
+                        "functionId": 2,
+                        "functionName": "build_domain_output",
+                        "id": "27",
+                        "inputParameters": [
+                            "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.parameter.domain",
+                            "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level",
+                            "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories",
+                            "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP"
+                        ],
+                        "outputVariables": [
+                            "observable_array"
+                        ],
+                        "type": "code"
                     },
                     "errors": {},
-                    "id": "24",
-                    "type": "utility",
+                    "id": "27",
+                    "type": "code",
+                    "userCode": null,
                     "warnings": {},
                     "x": 980,
-                    "y": 1344.5
+                    "y": 1380
                 },
-                "25": {
+                "28": {
+                    "customCode": "@phantom.playbook_block()\ndef build_ip_output(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):\n    phantom.debug(\"build_ip_output() called\")\n\n    ################################################################################\n    # Generate an observable dictionary to output into the observables data path.\n    ################################################################################\n\n    ip_reputation_result_data = phantom.collect2(container=container, datapath=[\"ip_reputation:action_result.parameter.ip\"], action_results=results)\n    filtered_result_0_data_ip_reputation_filter = phantom.collect2(container=container, datapath=[\"filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Level\",\"filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Categories\",\"filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.AUP\"])\n\n    ip_reputation_parameter_ip = [item[0] for item in ip_reputation_result_data]\n    filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_ip_reputation_filter]\n    filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_ip_reputation_filter]\n    filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_ip_reputation_filter]\n\n    import ipaddress\n    build_ip_output__observable_array = []\n    \n    for ip, threat_level, threat_categories, aup in zip(ip_reputation_parameter_ip, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        \n        observable_object = {\n            \"value\": ip,\n            \"type\": \"ipv4\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"source\": \"Talos Intelligence\"\n        }\n        ip_addr = ipaddress.ip_address(ip)\n        if isinstance(ip_addr, ipaddress.IPv6Address):\n            observable_object[\"type\"] = \"ipv6\"\n\n        build_ip_output__observable_array.append(observable_object)\n\n    ################################################################################\n    ## Custom Code Start\n    ################################################################################\n\n    # Write your custom code here...\n\n    ################################################################################\n    ## Custom Code End\n    ################################################################################\n\n    phantom.save_run_data(key=\"build_ip_output:observable_array\", value=json.dumps(build_ip_output__observable_array))\n\n    return",
                     "data": {
                         "advanced": {
-                            "customName": "ip artifact create",
+                            "customName": "build ip output",
                             "customNameId": 0,
-                            "description": "Create new artifact with the output of the ip reputation",
+                            "description": "Generate an observable dictionary to output into the observables data path.",
                             "join": [],
-                            "note": "Create new artifact with the output of the ip reputation"
+                            "note": "Generate an observable dictionary to output into the observables data path."
                         },
-                        "customFunction": {
-                            "draftMode": false,
-                            "name": "artifact_create",
-                            "repoName": "community"
-                        },
-                        "functionId": 9,
-                        "functionName": "ip_artifact_create",
-                        "id": "25",
-                        "loop": {
-                            "enabled": false,
-                            "exitAfterUnit": "m",
-                            "exitAfterValue": 10,
-                            "exitConditionEnabled": false,
-                            "exitLoopAfter": 2,
-                            "pauseUnit": "m",
-                            "pauseValue": 2
-                        },
-                        "selectMore": false,
-                        "type": "utility",
-                        "utilities": {
-                            "artifact_create": {
-                                "description": "Create a new artifact with the specified attributes. Supports all fields available in /rest/artifact. Add any unlisted inputs as dictionary keys in input_json. Unsupported keys will automatically be dropped.",
-                                "fields": [
-                                    {
-                                        "dataTypes": [
-                                            "phantom container id"
-                                        ],
-                                        "description": "Container which the artifact will be added to.",
-                                        "inputType": "item",
-                                        "label": "container",
-                                        "name": "container",
-                                        "placeholder": "container:id",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The name of the new artifact, which is optional and defaults to \"artifact\".",
-                                        "inputType": "item",
-                                        "label": "name",
-                                        "name": "name",
-                                        "placeholder": "artifact",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The label of the new artifact, which is optional and defaults to \"events\"",
-                                        "inputType": "item",
-                                        "label": "label",
-                                        "name": "label",
-                                        "placeholder": "events",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [
-                                            ""
-                                        ],
-                                        "description": "The severity of the new artifact, which is optional and defaults to \"Medium\". Typically this is either \"High\", \"Medium\", or \"Low\".",
-                                        "inputType": "item",
-                                        "label": "severity",
-                                        "name": "severity",
-                                        "placeholder": "Medium",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The name of the CEF field to populate in the artifact, such as \"destinationAddress\" or \"sourceDnsDomain\". Required only if cef_value is provided.",
-                                        "inputType": "item",
-                                        "label": "cef_field",
-                                        "name": "cef_field",
-                                        "placeholder": "destinationAddress",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [
-                                            "*"
-                                        ],
-                                        "description": "The value of the CEF field to populate in the artifact, such as the IP address, domain name, or file hash. Required only if cef_field is provided.",
-                                        "inputType": "item",
-                                        "label": "cef_value",
-                                        "name": "cef_value",
-                                        "placeholder": "192.0.2.192",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "The CEF data type of the data in cef_value. For example, this could be \"ip\", \"hash\", or \"domain\". Optional.",
-                                        "inputType": "item",
-                                        "label": "cef_data_type",
-                                        "name": "cef_data_type",
-                                        "placeholder": "ip",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "A comma-separated list of tags to apply to the created artifact, which is optional.",
-                                        "inputType": "item",
-                                        "label": "tags",
-                                        "name": "tags",
-                                        "placeholder": "tag1, tag2, tag3",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "Either \"true\" or \"false\", depending on whether or not the new artifact should trigger the execution of any playbooks that are set to active on the label of the container the artifact will be added to. Optional and defaults to \"false\".",
-                                        "inputType": "item",
-                                        "label": "run_automation",
-                                        "name": "run_automation",
-                                        "placeholder": "false",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    },
-                                    {
-                                        "dataTypes": [],
-                                        "description": "Optional parameter to modify any extra attributes of the artifact. Input_json will be merged with other inputs. In the event of a conflict, input_json will take precedence.",
-                                        "inputType": "item",
-                                        "label": "input_json",
-                                        "name": "input_json",
-                                        "placeholder": "{\"source_data_identifier\": \"1234\", \"data\": \"5678\"}",
-                                        "renderType": "datapath",
-                                        "required": false
-                                    }
-                                ],
-                                "label": "artifact_create",
-                                "name": "artifact_create"
-                            }
-                        },
-                        "utilityType": "custom_function",
-                        "values": {
-                            "artifact_create": {
-                                "cef_data_type": null,
-                                "cef_field": null,
-                                "cef_value": null,
-                                "container": "container:id",
-                                "input_json": "format_3:formatted_data.*",
-                                "label": "cisco_talos_ip_reputation",
-                                "name": "IP reputation results",
-                                "run_automation": null,
-                                "severity": null,
-                                "tags": null
-                            }
-                        }
+                        "functionId": 3,
+                        "functionName": "build_ip_output",
+                        "id": "28",
+                        "inputParameters": [
+                            "ip_reputation:action_result.parameter.ip",
+                            "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Level",
+                            "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Categories",
+                            "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.AUP"
+                        ],
+                        "outputVariables": [
+                            "observable_array"
+                        ],
+                        "type": "code"
                     },
                     "errors": {},
-                    "id": "25",
-                    "type": "utility",
+                    "id": "28",
+                    "type": "code",
                     "warnings": {},
                     "x": 1320,
-                    "y": 1340
+                    "y": 1380
                 },
                 "3": {
                     "data": {
@@ -914,7 +511,7 @@
                         },
                         "connector": "Cisco Talos Intelligence",
                         "connectorConfigs": [
-                            "cisco_talos_intelligence"
+                            "ciscotalosintelligence"
                         ],
                         "connectorId": "7c653487-22c8-4ec1-bca0-16a8b1513c86",
                         "connectorVersion": "v1",
@@ -946,7 +543,7 @@
                     "id": "3",
                     "type": "action",
                     "warnings": {},
-                    "x": 640,
+                    "x": 660,
                     "y": 700
                 },
                 "4": {
@@ -962,7 +559,7 @@
                         },
                         "connector": "Cisco Talos Intelligence",
                         "connectorConfigs": [
-                            "cisco_talos_intelligence"
+                            "ciscotalosintelligence"
                         ],
                         "connectorId": "7c653487-22c8-4ec1-bca0-16a8b1513c86",
                         "connectorVersion": "v1",
@@ -1010,7 +607,7 @@
                         },
                         "connector": "Cisco Talos Intelligence",
                         "connectorConfigs": [
-                            "cisco_talos_intelligence"
+                            "ciscotalosintelligence"
                         ],
                         "connectorId": "7c653487-22c8-4ec1-bca0-16a8b1513c86",
                         "connectorVersion": "v1",
@@ -1107,14 +704,39 @@
                 "name": "ip"
             }
         ],
-        "output_spec": null,
+        "output_spec": [
+            {
+                "contains": [],
+                "datapaths": [
+                    "build_url_output:custom_function:observable_array",
+                    "build_domain_output:custom_function:observable_array",
+                    "build_ip_output:custom_function:observable_array"
+                ],
+                "deduplicate": false,
+                "description": "An array of observable dictionaries with value, threat level, threat categories and AUP categories",
+                "metadata": {},
+                "name": "observable"
+            },
+            {
+                "contains": [],
+                "datapaths": [
+                    "format_1:formatted_data",
+                    "format_2:formatted_data",
+                    "format_3:formatted_data"
+                ],
+                "deduplicate": false,
+                "description": "An array of reports. One report per observable type.",
+                "metadata": {},
+                "name": "markdown_report"
+            }
+        ],
         "playbook_trigger": "artifact_created",
         "playbook_type": "data",
         "python_version": "3",
         "schema": "5.0.15",
-        "version": "6.3.0.719"
+        "version": "6.3.0.718"
     },
-    "create_time": "2024-10-30T23:32:16.025849+00:00",
+    "create_time": "2024-11-13T21:45:01.027937+00:00",
     "draft_mode": false,
     "labels": [
         "*"
