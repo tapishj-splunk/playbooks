@@ -98,7 +98,7 @@ def url_reputation(action=None, success=None, container=None, results=None, hand
     ## Custom Code End
     ################################################################################
 
-    phantom.act("url reputation", parameters=parameters, name="url_reputation", assets=["ciscotalosintelligence"], callback=url_reputation_filter)
+    phantom.act("url reputation", parameters=parameters, name="url_reputation", assets=["cisco_talos_intelligence"], callback=url_reputation_filter)
 
     return
 
@@ -134,7 +134,7 @@ def domain_reputation(action=None, success=None, container=None, results=None, h
     ## Custom Code End
     ################################################################################
 
-    phantom.act("domain reputation", parameters=parameters, name="domain_reputation", assets=["ciscotalosintelligence"], callback=domain_reputation_filter)
+    phantom.act("domain reputation", parameters=parameters, name="domain_reputation", assets=["cisco_talos_intelligence"], callback=domain_reputation_filter)
 
     return
 
@@ -170,7 +170,7 @@ def ip_reputation(action=None, success=None, container=None, results=None, handl
     ## Custom Code End
     ################################################################################
 
-    phantom.act("ip reputation", parameters=parameters, name="ip_reputation", assets=["ciscotalosintelligence"], callback=ip_reputation_filter)
+    phantom.act("ip reputation", parameters=parameters, name="ip_reputation", assets=["cisco_talos_intelligence"], callback=ip_reputation_filter)
 
     return
 
@@ -367,7 +367,13 @@ def build_url_output(action=None, success=None, container=None, results=None, ha
     filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_url_reputation_filter]
     filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_url_reputation_filter]
     filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_url_reputation_filter]
-    
+
+    build_url_output__observable_array = None
+
+    ################################################################################
+    ## Custom Code Start
+    ################################################################################
+
     from urllib.parse import urlparse
     build_url_output__observable_array = []
     
@@ -395,13 +401,6 @@ def build_url_output(action=None, success=None, container=None, results=None, ha
             observable_object['attributes']['port'] = parsed_url.port
         
         build_url_output__observable_array.append(observable_object)
-         
-
-    ################################################################################
-    ## Custom Code Start
-    ################################################################################
-
-    # Write your custom code here...
 
     ################################################################################
     ## Custom Code End
@@ -411,6 +410,7 @@ def build_url_output(action=None, success=None, container=None, results=None, ha
 
     return
 
+
 @phantom.playbook_block()
 def build_domain_output(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):
     phantom.debug("build_domain_output() called")
@@ -419,16 +419,23 @@ def build_domain_output(action=None, success=None, container=None, results=None,
     # Generate an observable dictionary to output into the observables data path.
     ################################################################################
 
-    filtered_result_0_data_domain_reputation_filter = phantom.collect2(container=container, datapath=["filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.parameter.domain","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP"])
+    domain_reputation_result_data = phantom.collect2(container=container, datapath=["domain_reputation:action_result.parameter.domain"], action_results=results)
+    filtered_result_0_data_domain_reputation_filter = phantom.collect2(container=container, datapath=["filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP"])
 
-    filtered_result_0_parameter_domain = [item[0] for item in filtered_result_0_data_domain_reputation_filter]
-    filtered_result_0_data___threat_level = [item[1] for item in filtered_result_0_data_domain_reputation_filter]
-    filtered_result_0_data___threat_categories = [item[2] for item in filtered_result_0_data_domain_reputation_filter]
-    filtered_result_0_data___aup = [item[3] for item in filtered_result_0_data_domain_reputation_filter]
+    domain_reputation_parameter_domain = [item[0] for item in domain_reputation_result_data]
+    filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_domain_reputation_filter]
+    filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_domain_reputation_filter]
+    filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_domain_reputation_filter]
+
+    build_domain_output__observable_array = None
+
+    ################################################################################
+    ## Custom Code Start
+    ################################################################################
 
     build_domain_output__observable_array = []
     
-    for domain, threat_level, threat_categories, aup in zip(filtered_result_0_parameter_domain, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):
+    for domain, threat_level, threat_categories, aup in zip(domain_reputation_parameter_domain, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):
         observable_object = {
             "value": domain,
             "type": "domain",
@@ -442,18 +449,13 @@ def build_domain_output(action=None, success=None, container=None, results=None,
         build_domain_output__observable_array.append(observable_object)
 
     ################################################################################
-    ## Custom Code Start
-    ################################################################################
-
-    # Write your custom code here...
-
-    ################################################################################
     ## Custom Code End
     ################################################################################
 
     phantom.save_run_data(key="build_domain_output:observable_array", value=json.dumps(build_domain_output__observable_array))
 
     return
+
 
 @phantom.playbook_block()
 def build_ip_output(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):
@@ -470,6 +472,12 @@ def build_ip_output(action=None, success=None, container=None, results=None, han
     filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_ip_reputation_filter]
     filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_ip_reputation_filter]
     filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_ip_reputation_filter]
+
+    build_ip_output__observable_array = None
+
+    ################################################################################
+    ## Custom Code Start
+    ################################################################################
 
     import ipaddress
     build_ip_output__observable_array = []
@@ -493,18 +501,13 @@ def build_ip_output(action=None, success=None, container=None, results=None, han
         build_ip_output__observable_array.append(observable_object)
 
     ################################################################################
-    ## Custom Code Start
-    ################################################################################
-
-    # Write your custom code here...
-
-    ################################################################################
     ## Custom Code End
     ################################################################################
 
     phantom.save_run_data(key="build_ip_output:observable_array", value=json.dumps(build_ip_output__observable_array))
 
     return
+
 
 @phantom.playbook_block()
 def on_finish(container, summary):

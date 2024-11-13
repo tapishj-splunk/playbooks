@@ -165,7 +165,7 @@
                     "type": "start",
                     "warnings": {},
                     "x": 1000,
-                    "y": 419.9999999999992
+                    "y": 419.9999999999991
                 },
                 "1": {
                     "data": {
@@ -404,7 +404,7 @@
                     "y": 564.5
                 },
                 "26": {
-                    "customCode": "@phantom.playbook_block()\ndef build_url_output(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):\n    phantom.debug(\"build_url_output() called\")\n\n    ################################################################################\n    # Generate an observable dictionary to output into the observables data path.\n    ################################################################################\n\n    url_reputation_result_data = phantom.collect2(container=container, datapath=[\"url_reputation:action_result.parameter.url\"], action_results=results)\n    filtered_result_0_data_url_reputation_filter = phantom.collect2(container=container, datapath=[\"filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Level\",\"filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Categories\",\"filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.AUP\"])\n\n    url_reputation_parameter_url = [item[0] for item in url_reputation_result_data]\n    filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_url_reputation_filter]\n    filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_url_reputation_filter]\n    filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_url_reputation_filter]\n    \n    from urllib.parse import urlparse\n    build_url_output__observable_array = []\n    \n    for url, threat_level, threat_categories, aup in zip(url_reputation_parameter_url, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        parsed_url = urlparse(url)\n        observable_object = {\n            \"value\": url,\n            \"type\": \"url\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"attributes\": {\n                \"hostname\": parsed_url.hostname,\n                \"scheme\": parsed_url.scheme\n            },\n            \"source\": \"Talos Intelligence\",\n        }\n        if parsed_url.path:\n            observable_object['attributes']['path'] = parsed_url.path\n        if parsed_url.query:\n            observable_object['attributes']['query'] = parsed_url.query\n        if parsed_url.port:\n            observable_object['attributes']['port'] = parsed_url.port\n        \n        build_url_output__observable_array.append(observable_object)\n         \n\n    ################################################################################\n    ## Custom Code Start\n    ################################################################################\n\n    # Write your custom code here...\n\n    ################################################################################\n    ## Custom Code End\n    ################################################################################\n\n    phantom.save_run_data(key=\"build_url_output:observable_array\", value=json.dumps(build_url_output__observable_array))\n\n    return",
+                    "customCode": null,
                     "data": {
                         "advanced": {
                             "customName": "build url output",
@@ -430,13 +430,13 @@
                     "errors": {},
                     "id": "26",
                     "type": "code",
-                    "userCode": null,
+                    "userCode": "\n    from urllib.parse import urlparse\n    build_url_output__observable_array = []\n    \n    for url, threat_level, threat_categories, aup in zip(url_reputation_parameter_url, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        parsed_url = urlparse(url)\n        observable_object = {\n            \"value\": url,\n            \"type\": \"url\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"attributes\": {\n                \"hostname\": parsed_url.hostname,\n                \"scheme\": parsed_url.scheme\n            },\n            \"source\": \"Talos Intelligence\",\n        }\n        if parsed_url.path:\n            observable_object['attributes']['path'] = parsed_url.path\n        if parsed_url.query:\n            observable_object['attributes']['query'] = parsed_url.query\n        if parsed_url.port:\n            observable_object['attributes']['port'] = parsed_url.port\n        \n        build_url_output__observable_array.append(observable_object)\n\n",
                     "warnings": {},
                     "x": 640,
                     "y": 1380
                 },
                 "27": {
-                    "customCode": "@phantom.playbook_block()\ndef build_domain_output(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):\n    phantom.debug(\"build_domain_output() called\")\n\n    ################################################################################\n    # Generate an observable dictionary to output into the observables data path.\n    ################################################################################\n\n    filtered_result_0_data_domain_reputation_filter = phantom.collect2(container=container, datapath=[\"filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.parameter.domain\",\"filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level\",\"filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories\",\"filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP\"])\n\n    filtered_result_0_parameter_domain = [item[0] for item in filtered_result_0_data_domain_reputation_filter]\n    filtered_result_0_data___threat_level = [item[1] for item in filtered_result_0_data_domain_reputation_filter]\n    filtered_result_0_data___threat_categories = [item[2] for item in filtered_result_0_data_domain_reputation_filter]\n    filtered_result_0_data___aup = [item[3] for item in filtered_result_0_data_domain_reputation_filter]\n\n    build_domain_output__observable_array = []\n    \n    for domain, threat_level, threat_categories, aup in zip(filtered_result_0_parameter_domain, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        observable_object = {\n            \"value\": domain,\n            \"type\": \"domain\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"source\": \"Talos Intelligence\"\n        }\n        build_domain_output__observable_array.append(observable_object)\n\n    ################################################################################\n    ## Custom Code Start\n    ################################################################################\n\n    # Write your custom code here...\n\n    ################################################################################\n    ## Custom Code End\n    ################################################################################\n\n    phantom.save_run_data(key=\"build_domain_output:observable_array\", value=json.dumps(build_domain_output__observable_array))\n\n    return",
+                    "customCode": null,
                     "data": {
                         "advanced": {
                             "customName": "build domain output",
@@ -449,7 +449,7 @@
                         "functionName": "build_domain_output",
                         "id": "27",
                         "inputParameters": [
-                            "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.parameter.domain",
+                            "domain_reputation:action_result.parameter.domain",
                             "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level",
                             "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories",
                             "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP"
@@ -462,13 +462,13 @@
                     "errors": {},
                     "id": "27",
                     "type": "code",
-                    "userCode": null,
+                    "userCode": "\n    build_domain_output__observable_array = []\n    \n    for domain, threat_level, threat_categories, aup in zip(domain_reputation_parameter_domain, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        observable_object = {\n            \"value\": domain,\n            \"type\": \"domain\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"source\": \"Talos Intelligence\"\n        }\n        build_domain_output__observable_array.append(observable_object)\n\n",
                     "warnings": {},
                     "x": 980,
                     "y": 1380
                 },
                 "28": {
-                    "customCode": "@phantom.playbook_block()\ndef build_ip_output(action=None, success=None, container=None, results=None, handle=None, filtered_artifacts=None, filtered_results=None, custom_function=None, loop_state_json=None, **kwargs):\n    phantom.debug(\"build_ip_output() called\")\n\n    ################################################################################\n    # Generate an observable dictionary to output into the observables data path.\n    ################################################################################\n\n    ip_reputation_result_data = phantom.collect2(container=container, datapath=[\"ip_reputation:action_result.parameter.ip\"], action_results=results)\n    filtered_result_0_data_ip_reputation_filter = phantom.collect2(container=container, datapath=[\"filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Level\",\"filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Categories\",\"filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.AUP\"])\n\n    ip_reputation_parameter_ip = [item[0] for item in ip_reputation_result_data]\n    filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_ip_reputation_filter]\n    filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_ip_reputation_filter]\n    filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_ip_reputation_filter]\n\n    import ipaddress\n    build_ip_output__observable_array = []\n    \n    for ip, threat_level, threat_categories, aup in zip(ip_reputation_parameter_ip, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        \n        observable_object = {\n            \"value\": ip,\n            \"type\": \"ipv4\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"source\": \"Talos Intelligence\"\n        }\n        ip_addr = ipaddress.ip_address(ip)\n        if isinstance(ip_addr, ipaddress.IPv6Address):\n            observable_object[\"type\"] = \"ipv6\"\n\n        build_ip_output__observable_array.append(observable_object)\n\n    ################################################################################\n    ## Custom Code Start\n    ################################################################################\n\n    # Write your custom code here...\n\n    ################################################################################\n    ## Custom Code End\n    ################################################################################\n\n    phantom.save_run_data(key=\"build_ip_output:observable_array\", value=json.dumps(build_ip_output__observable_array))\n\n    return",
+                    "customCode": null,
                     "data": {
                         "advanced": {
                             "customName": "build ip output",
@@ -494,6 +494,7 @@
                     "errors": {},
                     "id": "28",
                     "type": "code",
+                    "userCode": "\n    import ipaddress\n    build_ip_output__observable_array = []\n    \n    for ip, threat_level, threat_categories, aup in zip(ip_reputation_parameter_ip, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        \n        observable_object = {\n            \"value\": ip,\n            \"type\": \"ipv4\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"source\": \"Talos Intelligence\"\n        }\n        ip_addr = ipaddress.ip_address(ip)\n        if isinstance(ip_addr, ipaddress.IPv6Address):\n            observable_object[\"type\"] = \"ipv6\"\n\n        build_ip_output__observable_array.append(observable_object)\n\n",
                     "warnings": {},
                     "x": 1320,
                     "y": 1380
@@ -511,7 +512,7 @@
                         },
                         "connector": "Cisco Talos Intelligence",
                         "connectorConfigs": [
-                            "ciscotalosintelligence"
+                            "cisco_talos_intelligence"
                         ],
                         "connectorId": "7c653487-22c8-4ec1-bca0-16a8b1513c86",
                         "connectorVersion": "v1",
@@ -543,7 +544,7 @@
                     "id": "3",
                     "type": "action",
                     "warnings": {},
-                    "x": 660,
+                    "x": 640,
                     "y": 700
                 },
                 "4": {
@@ -559,7 +560,7 @@
                         },
                         "connector": "Cisco Talos Intelligence",
                         "connectorConfigs": [
-                            "ciscotalosintelligence"
+                            "cisco_talos_intelligence"
                         ],
                         "connectorId": "7c653487-22c8-4ec1-bca0-16a8b1513c86",
                         "connectorVersion": "v1",
@@ -607,7 +608,7 @@
                         },
                         "connector": "Cisco Talos Intelligence",
                         "connectorConfigs": [
-                            "ciscotalosintelligence"
+                            "cisco_talos_intelligence"
                         ],
                         "connectorId": "7c653487-22c8-4ec1-bca0-16a8b1513c86",
                         "connectorVersion": "v1",
@@ -736,7 +737,7 @@
         "schema": "5.0.15",
         "version": "6.3.0.718"
     },
-    "create_time": "2024-11-13T21:45:01.027937+00:00",
+    "create_time": "2024-11-13T23:05:22.793828+00:00",
     "draft_mode": false,
     "labels": [
         "*"
