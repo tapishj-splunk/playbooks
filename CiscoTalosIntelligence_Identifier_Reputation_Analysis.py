@@ -252,17 +252,18 @@ def format_2(action=None, success=None, container=None, results=None, handle=Non
     phantom.debug("format_2() called")
 
     ################################################################################
-    # Format output of domain threat data into an appropriate format for artifact_create
+    # Format output of domain threat data into an appropriate format for build_domain_output 
+    # that generates observable objects.
     ################################################################################
 
-    template = """SOAR analyzed Domain using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| Domain | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%"""
+    template = """SOAR analyzed Domain using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| Domain | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| {0} | {1} | {2} | {3}\n%%"""
 
     # parameter list for template variable replacement
     parameters = [
-        "domain_reputation:action_result.parameter.domain",
-        "domain_reputation:action_result.data.*.Threat_Level",
-        "domain_reputation:action_result.data.*.Threat_Categories",
-        "domain_reputation:action_result.data.*.AUP"
+        "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Observable",
+        "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level",
+        "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories",
+        "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP"
     ]
 
     ################################################################################
@@ -287,17 +288,18 @@ def format_1(action=None, success=None, container=None, results=None, handle=Non
     phantom.debug("format_1() called")
 
     ################################################################################
-    # Format output of url threat data into an appropriate format for artifact_create
+    # Format output of url threat data into an appropriate format for build_url_output 
+    # that generates observable objects.
     ################################################################################
 
-    template = """SOAR analyzed URL using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| URL | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%"""
+    template = """SOAR analyzed URL using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| URL | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| {0} | {1} | {2} | {3}\n%%"""
 
     # parameter list for template variable replacement
     parameters = [
-        "url_reputation:action_result.parameter.url",
-        "url_reputation:action_result.data.*.Threat_Level",
-        "url_reputation:action_result.data.*.Threat_Categories",
-        "url_reputation:action_result.data.*.AUP"
+        "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Observable",
+        "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Level",
+        "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Categories",
+        "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.AUP"
     ]
 
     ################################################################################
@@ -322,17 +324,18 @@ def format_3(action=None, success=None, container=None, results=None, handle=Non
     phantom.debug("format_3() called")
 
     ################################################################################
-    # Format output of ip threat data into an appropriate format for artifact_create
+    # Format output of ip threat data into an appropriate format for build_ip_output 
+    # that generates observable objects. 
     ################################################################################
 
-    template = """SOAR analyzed IP using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| IP | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%"""
+    template = """SOAR analyzed IP using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| IP | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| {0} | {1} | {2} | {3}\n%%"""
 
     # parameter list for template variable replacement
     parameters = [
-        "ip_reputation:action_result.parameter.ip",
-        "ip_reputation:action_result.data.*.Threat_Level",
-        "ip_reputation:action_result.data.*.Threat_Categories",
-        "ip_reputation:action_result.data.*.AUP"
+        "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Observable",
+        "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Level",
+        "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Categories",
+        "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.AUP"
     ]
 
     ################################################################################
@@ -360,13 +363,12 @@ def build_url_output(action=None, success=None, container=None, results=None, ha
     # Generate an observable dictionary to output into the observables data path.
     ################################################################################
 
-    url_reputation_result_data = phantom.collect2(container=container, datapath=["url_reputation:action_result.parameter.url"], action_results=results)
-    filtered_result_0_data_url_reputation_filter = phantom.collect2(container=container, datapath=["filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Level","filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Categories","filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.AUP"])
+    filtered_result_0_data_url_reputation_filter = phantom.collect2(container=container, datapath=["filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Observable","filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Level","filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Categories","filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.AUP"])
 
-    url_reputation_parameter_url = [item[0] for item in url_reputation_result_data]
-    filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_url_reputation_filter]
-    filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_url_reputation_filter]
-    filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_url_reputation_filter]
+    filtered_result_0_data___observable = [item[0] for item in filtered_result_0_data_url_reputation_filter]
+    filtered_result_0_data___threat_level = [item[1] for item in filtered_result_0_data_url_reputation_filter]
+    filtered_result_0_data___threat_categories = [item[2] for item in filtered_result_0_data_url_reputation_filter]
+    filtered_result_0_data___aup = [item[3] for item in filtered_result_0_data_url_reputation_filter]
 
     build_url_output__observable_array = None
 
@@ -377,21 +379,39 @@ def build_url_output(action=None, success=None, container=None, results=None, ha
     from urllib.parse import urlparse
     build_url_output__observable_array = []
     
-    for url, threat_level, threat_categories, aup in zip(url_reputation_parameter_url, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):
+    talos_to_score_mapping = {"unknown": "Unknown", "trusted": "Safe", "favorable": "Probably_Safe", "neutral": "May_not_be_Safe", "questionable": "Suspicious_or_Risky", "unstrusted": "Malicious"}
+    score_table = {
+        "Unkown": "0",
+        "Very_Safe": "1",
+        "Safe": "2",
+        "Probably_Safe": "3",
+        "Leans_Safe": "4",
+        "May_not_be_Safe": "5",
+        "Exercise_Caution": "6",
+        "Suspicious_or_Risky": "7",
+        "Possibly_Malicious": "8",
+        "Probably_Malicious": "9",
+        "Malicious": "10"
+    }
+    
+    for url, threat_level, threat_categories, aup in zip(filtered_result_0_data___observable, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):
         parsed_url = urlparse(url)
+        score = talos_to_score_mapping.get(threat_level.lower(), "")
         observable_object = {
             "value": url,
             "type": "url",
             "reputation": {
                 "threat_level": threat_level,
                 "threat_categories": threat_categories,
-                "aup_categories": aup
+                "aup_categories": aup,
+                "score": score,
+                "score_id": score_table.get(score, "")
             },
             "attributes": {
                 "hostname": parsed_url.hostname,
                 "scheme": parsed_url.scheme
             },
-            "source": "Talos Intelligence",
+            "source": "Cisco Talos Intelligence",
         }
         if parsed_url.path:
             observable_object['attributes']['path'] = parsed_url.path
@@ -419,13 +439,12 @@ def build_domain_output(action=None, success=None, container=None, results=None,
     # Generate an observable dictionary to output into the observables data path.
     ################################################################################
 
-    domain_reputation_result_data = phantom.collect2(container=container, datapath=["domain_reputation:action_result.parameter.domain"], action_results=results)
-    filtered_result_0_data_domain_reputation_filter = phantom.collect2(container=container, datapath=["filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP"])
+    filtered_result_0_data_domain_reputation_filter = phantom.collect2(container=container, datapath=["filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Observable","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories","filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP"])
 
-    domain_reputation_parameter_domain = [item[0] for item in domain_reputation_result_data]
-    filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_domain_reputation_filter]
-    filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_domain_reputation_filter]
-    filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_domain_reputation_filter]
+    filtered_result_0_data___observable = [item[0] for item in filtered_result_0_data_domain_reputation_filter]
+    filtered_result_0_data___threat_level = [item[1] for item in filtered_result_0_data_domain_reputation_filter]
+    filtered_result_0_data___threat_categories = [item[2] for item in filtered_result_0_data_domain_reputation_filter]
+    filtered_result_0_data___aup = [item[3] for item in filtered_result_0_data_domain_reputation_filter]
 
     build_domain_output__observable_array = None
 
@@ -435,16 +454,34 @@ def build_domain_output(action=None, success=None, container=None, results=None,
 
     build_domain_output__observable_array = []
     
-    for domain, threat_level, threat_categories, aup in zip(domain_reputation_parameter_domain, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):
+    talos_to_score_mapping = {"unknown": "Unknown", "trusted": "Safe", "favorable": "Probably_Safe", "neutral": "May_not_be_Safe", "questionable": "Suspicious_or_Risky", "unstrusted": "Malicious"}
+    score_table = {
+        "Unkown": "0",
+        "Very_Safe": "1",
+        "Safe": "2",
+        "Probably_Safe": "3",
+        "Leans_Safe": "4",
+        "May_not_be_Safe": "5",
+        "Exercise_Caution": "6",
+        "Suspicious_or_Risky": "7",
+        "Possibly_Malicious": "8",
+        "Probably_Malicious": "9",
+        "Malicious": "10"
+    }
+    
+    for domain, threat_level, threat_categories, aup in zip(filtered_result_0_data___observable, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):
+        score = talos_to_score_mapping.get(threat_level.lower(), "")
         observable_object = {
             "value": domain,
             "type": "domain",
             "reputation": {
                 "threat_level": threat_level,
                 "threat_categories": threat_categories,
-                "aup_categories": aup
+                "aup_categories": aup,
+                "score": score,
+                "score_id": score_table.get(score, "")
             },
-            "source": "Talos Intelligence"
+            "source": "Cisco Talos Intelligence"
         }
         build_domain_output__observable_array.append(observable_object)
 
@@ -465,13 +502,12 @@ def build_ip_output(action=None, success=None, container=None, results=None, han
     # Generate an observable dictionary to output into the observables data path.
     ################################################################################
 
-    ip_reputation_result_data = phantom.collect2(container=container, datapath=["ip_reputation:action_result.parameter.ip"], action_results=results)
-    filtered_result_0_data_ip_reputation_filter = phantom.collect2(container=container, datapath=["filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Level","filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Categories","filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.AUP"])
+    filtered_result_0_data_ip_reputation_filter = phantom.collect2(container=container, datapath=["filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Observable","filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Level","filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Categories","filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.AUP"])
 
-    ip_reputation_parameter_ip = [item[0] for item in ip_reputation_result_data]
-    filtered_result_0_data___threat_level = [item[0] for item in filtered_result_0_data_ip_reputation_filter]
-    filtered_result_0_data___threat_categories = [item[1] for item in filtered_result_0_data_ip_reputation_filter]
-    filtered_result_0_data___aup = [item[2] for item in filtered_result_0_data_ip_reputation_filter]
+    filtered_result_0_data___observable = [item[0] for item in filtered_result_0_data_ip_reputation_filter]
+    filtered_result_0_data___threat_level = [item[1] for item in filtered_result_0_data_ip_reputation_filter]
+    filtered_result_0_data___threat_categories = [item[2] for item in filtered_result_0_data_ip_reputation_filter]
+    filtered_result_0_data___aup = [item[3] for item in filtered_result_0_data_ip_reputation_filter]
 
     build_ip_output__observable_array = None
 
@@ -482,17 +518,34 @@ def build_ip_output(action=None, success=None, container=None, results=None, han
     import ipaddress
     build_ip_output__observable_array = []
     
-    for ip, threat_level, threat_categories, aup in zip(ip_reputation_parameter_ip, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):
-        
+    talos_to_score_mapping = {"unknown": "Unknown", "trusted": "Safe", "favorable": "Probably_Safe", "neutral": "May_not_be_Safe", "questionable": "Suspicious_or_Risky", "unstrusted": "Malicious"}
+    score_table = {
+        "Unkown": "0",
+        "Very_Safe": "1",
+        "Safe": "2",
+        "Probably_Safe": "3",
+        "Leans_Safe": "4",
+        "May_not_be_Safe": "5",
+        "Exercise_Caution": "6",
+        "Suspicious_or_Risky": "7",
+        "Possibly_Malicious": "8",
+        "Probably_Malicious": "9",
+        "Malicious": "10"
+    }
+    
+    for ip, threat_level, threat_categories, aup in zip(filtered_result_0_data___observable, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):
+        score = talos_to_score_mapping.get(threat_level.lower(), "")
         observable_object = {
             "value": ip,
             "type": "ipv4",
             "reputation": {
                 "threat_level": threat_level,
                 "threat_categories": threat_categories,
-                "aup_categories": aup
+                "aup_categories": aup,
+                "score": score,
+                "score_id": score_table.get(score, "")
             },
-            "source": "Talos Intelligence"
+            "source": "Cisco Talos Intelligence"
         }
         ip_addr = ipaddress.ip_address(ip)
         if isinstance(ip_addr, ipaddress.IPv6Address):

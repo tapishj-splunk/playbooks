@@ -149,7 +149,7 @@
                     "targetPort": "1_in"
                 }
             ],
-            "hash": "b2a3e0462f4ff2e3f3f421cad701ba5d621bd79c",
+            "hash": "eba6b9d077093e83e07346cba73e6ed0a16e86ea",
             "nodes": {
                 "0": {
                     "data": {
@@ -165,7 +165,7 @@
                     "type": "start",
                     "warnings": {},
                     "x": 1000,
-                    "y": 419.9999999999991
+                    "y": 419.9999999999985
                 },
                 "1": {
                     "data": {
@@ -261,20 +261,20 @@
                         "advanced": {
                             "customName": "format 2",
                             "customNameId": 0,
-                            "description": "Format output of domain threat data into an appropriate format for artifact_create",
+                            "description": "Format output of domain threat data into an appropriate format for build_domain_output that generates observable objects.",
                             "join": [],
-                            "note": "Format output of domain threat data into an appropriate format for artifact_create"
+                            "note": "Format output of domain threat data into an appropriate format for build_domain_output that generates observable objects."
                         },
                         "functionId": 4,
                         "functionName": "format_2",
                         "id": "16",
                         "parameters": [
-                            "domain_reputation:action_result.parameter.domain",
-                            "domain_reputation:action_result.data.*.Threat_Level",
-                            "domain_reputation:action_result.data.*.Threat_Categories",
-                            "domain_reputation:action_result.data.*.AUP"
+                            "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Observable",
+                            "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level",
+                            "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories",
+                            "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP"
                         ],
-                        "template": "SOAR analyzed Domain using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| Domain | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%",
+                        "template": "SOAR analyzed Domain using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| Domain | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| {0} | {1} | {2} | {3}\n%%",
                         "type": "format"
                     },
                     "errors": {},
@@ -290,20 +290,20 @@
                         "advanced": {
                             "customName": "format 1",
                             "customNameId": 0,
-                            "description": "Format output of url threat data into an appropriate format for artifact_create",
+                            "description": "Format output of url threat data into an appropriate format for build_url_output that generates observable objects.",
                             "join": [],
-                            "note": "Format output of url threat data into an appropriate format for artifact_create"
+                            "note": "Format output of url threat data into an appropriate format for build_url_output that generates observable objects."
                         },
                         "functionId": 5,
                         "functionName": "format_1",
                         "id": "17",
                         "parameters": [
-                            "url_reputation:action_result.parameter.url",
-                            "url_reputation:action_result.data.*.Threat_Level",
-                            "url_reputation:action_result.data.*.Threat_Categories",
-                            "url_reputation:action_result.data.*.AUP"
+                            "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Observable",
+                            "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Level",
+                            "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Categories",
+                            "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.AUP"
                         ],
-                        "template": "SOAR analyzed URL using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| URL | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%",
+                        "template": "SOAR analyzed URL using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| URL | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| {0} | {1} | {2} | {3}\n%%",
                         "type": "format"
                     },
                     "errors": {},
@@ -318,20 +318,20 @@
                         "advanced": {
                             "customName": "format 3",
                             "customNameId": 0,
-                            "description": "Format output of ip threat data into an appropriate format for artifact_create",
+                            "description": "Format output of ip threat data into an appropriate format for build_ip_output that generates observable objects. ",
                             "join": [],
-                            "note": "Format output of ip threat data into an appropriate format for artifact_create"
+                            "note": "Format output of ip threat data into an appropriate format for build_ip_output that generates observable objects. "
                         },
                         "functionId": 6,
                         "functionName": "format_3",
                         "id": "18",
                         "parameters": [
-                            "ip_reputation:action_result.parameter.ip",
-                            "ip_reputation:action_result.data.*.Threat_Level",
-                            "ip_reputation:action_result.data.*.Threat_Categories",
-                            "ip_reputation:action_result.data.*.AUP"
+                            "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Observable",
+                            "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Level",
+                            "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Categories",
+                            "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.AUP"
                         ],
-                        "template": "SOAR analyzed IP using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| IP | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} |\n%%",
+                        "template": "SOAR analyzed IP using Talos Intelligence.  The table below shows a summary of the information gathered.\n\n| IP | Threat Level | Threat Categories | AUP Categories |\n| --- | --- | --- | --- |\n%%\n| {0} | {1} | {2} | {3}\n%%",
                         "type": "format"
                     },
                     "errors": {},
@@ -417,7 +417,7 @@
                         "functionName": "build_url_output",
                         "id": "26",
                         "inputParameters": [
-                            "url_reputation:action_result.parameter.url",
+                            "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Observable",
                             "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Level",
                             "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.Threat_Categories",
                             "filtered-data:url_reputation_filter:condition_1:url_reputation:action_result.data.*.AUP"
@@ -430,7 +430,7 @@
                     "errors": {},
                     "id": "26",
                     "type": "code",
-                    "userCode": "\n    from urllib.parse import urlparse\n    build_url_output__observable_array = []\n    \n    for url, threat_level, threat_categories, aup in zip(url_reputation_parameter_url, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        parsed_url = urlparse(url)\n        observable_object = {\n            \"value\": url,\n            \"type\": \"url\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"attributes\": {\n                \"hostname\": parsed_url.hostname,\n                \"scheme\": parsed_url.scheme\n            },\n            \"source\": \"Talos Intelligence\",\n        }\n        if parsed_url.path:\n            observable_object['attributes']['path'] = parsed_url.path\n        if parsed_url.query:\n            observable_object['attributes']['query'] = parsed_url.query\n        if parsed_url.port:\n            observable_object['attributes']['port'] = parsed_url.port\n        \n        build_url_output__observable_array.append(observable_object)\n\n",
+                    "userCode": "\n    from urllib.parse import urlparse\n    build_url_output__observable_array = []\n    \n    talos_to_score_mapping = {\"unknown\": \"Unknown\", \"trusted\": \"Safe\", \"favorable\": \"Probably_Safe\", \"neutral\": \"May_not_be_Safe\", \"questionable\": \"Suspicious_or_Risky\", \"unstrusted\": \"Malicious\"}\n    score_table = {\n        \"Unkown\": \"0\",\n        \"Very_Safe\": \"1\",\n        \"Safe\": \"2\",\n        \"Probably_Safe\": \"3\",\n        \"Leans_Safe\": \"4\",\n        \"May_not_be_Safe\": \"5\",\n        \"Exercise_Caution\": \"6\",\n        \"Suspicious_or_Risky\": \"7\",\n        \"Possibly_Malicious\": \"8\",\n        \"Probably_Malicious\": \"9\",\n        \"Malicious\": \"10\"\n    }\n    \n    for url, threat_level, threat_categories, aup in zip(filtered_result_0_data___observable, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        parsed_url = urlparse(url)\n        score = talos_to_score_mapping.get(threat_level.lower(), \"\")\n        observable_object = {\n            \"value\": url,\n            \"type\": \"url\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup,\n                \"score\": score,\n                \"score_id\": score_table.get(score, \"\")\n            },\n            \"attributes\": {\n                \"hostname\": parsed_url.hostname,\n                \"scheme\": parsed_url.scheme\n            },\n            \"source\": \"Cisco Talos Intelligence\",\n        }\n        if parsed_url.path:\n            observable_object['attributes']['path'] = parsed_url.path\n        if parsed_url.query:\n            observable_object['attributes']['query'] = parsed_url.query\n        if parsed_url.port:\n            observable_object['attributes']['port'] = parsed_url.port\n        \n        build_url_output__observable_array.append(observable_object)\n\n",
                     "warnings": {},
                     "x": 640,
                     "y": 1380
@@ -449,7 +449,7 @@
                         "functionName": "build_domain_output",
                         "id": "27",
                         "inputParameters": [
-                            "domain_reputation:action_result.parameter.domain",
+                            "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Observable",
                             "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Level",
                             "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.Threat_Categories",
                             "filtered-data:domain_reputation_filter:condition_1:domain_reputation:action_result.data.*.AUP"
@@ -462,7 +462,7 @@
                     "errors": {},
                     "id": "27",
                     "type": "code",
-                    "userCode": "\n    build_domain_output__observable_array = []\n    \n    for domain, threat_level, threat_categories, aup in zip(domain_reputation_parameter_domain, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        observable_object = {\n            \"value\": domain,\n            \"type\": \"domain\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"source\": \"Talos Intelligence\"\n        }\n        build_domain_output__observable_array.append(observable_object)\n\n",
+                    "userCode": "\n    build_domain_output__observable_array = []\n    \n    talos_to_score_mapping = {\"unknown\": \"Unknown\", \"trusted\": \"Safe\", \"favorable\": \"Probably_Safe\", \"neutral\": \"May_not_be_Safe\", \"questionable\": \"Suspicious_or_Risky\", \"unstrusted\": \"Malicious\"}\n    score_table = {\n        \"Unkown\": \"0\",\n        \"Very_Safe\": \"1\",\n        \"Safe\": \"2\",\n        \"Probably_Safe\": \"3\",\n        \"Leans_Safe\": \"4\",\n        \"May_not_be_Safe\": \"5\",\n        \"Exercise_Caution\": \"6\",\n        \"Suspicious_or_Risky\": \"7\",\n        \"Possibly_Malicious\": \"8\",\n        \"Probably_Malicious\": \"9\",\n        \"Malicious\": \"10\"\n    }\n    \n    for domain, threat_level, threat_categories, aup in zip(filtered_result_0_data___observable, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        score = talos_to_score_mapping.get(threat_level.lower(), \"\")\n        observable_object = {\n            \"value\": domain,\n            \"type\": \"domain\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup,\n                \"score\": score,\n                \"score_id\": score_table.get(score, \"\")\n            },\n            \"source\": \"Cisco Talos Intelligence\"\n        }\n        build_domain_output__observable_array.append(observable_object)\n\n",
                     "warnings": {},
                     "x": 980,
                     "y": 1380
@@ -481,7 +481,7 @@
                         "functionName": "build_ip_output",
                         "id": "28",
                         "inputParameters": [
-                            "ip_reputation:action_result.parameter.ip",
+                            "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Observable",
                             "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Level",
                             "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.Threat_Categories",
                             "filtered-data:ip_reputation_filter:condition_1:ip_reputation:action_result.data.*.AUP"
@@ -494,7 +494,7 @@
                     "errors": {},
                     "id": "28",
                     "type": "code",
-                    "userCode": "\n    import ipaddress\n    build_ip_output__observable_array = []\n    \n    for ip, threat_level, threat_categories, aup in zip(ip_reputation_parameter_ip, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        \n        observable_object = {\n            \"value\": ip,\n            \"type\": \"ipv4\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup\n            },\n            \"source\": \"Talos Intelligence\"\n        }\n        ip_addr = ipaddress.ip_address(ip)\n        if isinstance(ip_addr, ipaddress.IPv6Address):\n            observable_object[\"type\"] = \"ipv6\"\n\n        build_ip_output__observable_array.append(observable_object)\n\n",
+                    "userCode": "\n    import ipaddress\n    build_ip_output__observable_array = []\n    \n    talos_to_score_mapping = {\"unknown\": \"Unknown\", \"trusted\": \"Safe\", \"favorable\": \"Probably_Safe\", \"neutral\": \"May_not_be_Safe\", \"questionable\": \"Suspicious_or_Risky\", \"unstrusted\": \"Malicious\"}\n    score_table = {\n        \"Unkown\": \"0\",\n        \"Very_Safe\": \"1\",\n        \"Safe\": \"2\",\n        \"Probably_Safe\": \"3\",\n        \"Leans_Safe\": \"4\",\n        \"May_not_be_Safe\": \"5\",\n        \"Exercise_Caution\": \"6\",\n        \"Suspicious_or_Risky\": \"7\",\n        \"Possibly_Malicious\": \"8\",\n        \"Probably_Malicious\": \"9\",\n        \"Malicious\": \"10\"\n    }\n    \n    for ip, threat_level, threat_categories, aup in zip(filtered_result_0_data___observable, filtered_result_0_data___threat_level, filtered_result_0_data___threat_categories, filtered_result_0_data___aup):\n        score = talos_to_score_mapping.get(threat_level.lower(), \"\")\n        observable_object = {\n            \"value\": ip,\n            \"type\": \"ipv4\",\n            \"reputation\": {\n                \"threat_level\": threat_level,\n                \"threat_categories\": threat_categories,\n                \"aup_categories\": aup,\n                \"score\": score,\n                \"score_id\": score_table.get(score, \"\")\n            },\n            \"source\": \"Cisco Talos Intelligence\"\n        }\n        ip_addr = ipaddress.ip_address(ip)\n        if isinstance(ip_addr, ipaddress.IPv6Address):\n            observable_object[\"type\"] = \"ipv6\"\n\n        build_ip_output__observable_array.append(observable_object)\n\n",
                     "warnings": {},
                     "x": 1320,
                     "y": 1380
@@ -735,9 +735,9 @@
         "playbook_type": "data",
         "python_version": "3",
         "schema": "5.0.15",
-        "version": "6.3.0.718"
+        "version": "6.3.1.176"
     },
-    "create_time": "2024-11-13T23:05:22.793828+00:00",
+    "create_time": "2024-12-11T22:12:36.759275+00:00",
     "draft_mode": false,
     "labels": [
         "*"
